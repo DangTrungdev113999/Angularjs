@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="./js/angular.min.js"></script>
+    <script src="./ng-repeat/directiverepeat.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" >
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" ></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <style>
+        table thead td{
+            cursor: pointer;
+        }
+        .arrow-up{
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right:  5px solid transparent;
+            border-bottom: 10px solid black;
+            display: inline-block;
+        }
+        .arrow-down{
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right:  5px solid transparent;
+            border-top: 10px solid black;
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <div ng-controller="myController">
+        <table>
+            <thead>
+                <tr>
+                    <td>FirstName</td>
+                    <td>LastName</td>
+                    <td>Gender</td>
+                    <td>salary</td>
+                </tr>
+            </thead>
+            <tbody ng-repeat="employee in employees">
+                <tr>
+                    <td>{{employee.firstName}}</td>
+                    <td>{{employee.lastName}}</td>
+                    <td>{{employee.gender}}</td>
+                    <td>{{employee.salary}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div ng-controller="nestedRepeat">
+        <ul>
+            <li ng-repeat = "country in countries">
+                {{country.name}} -Index {{$index}}
+                <ul>
+                    <li ng-repeat="city in country.cities">
+                        {{city.name}}-Index {{$index}}
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div ng-controller="eventClick">
+        <table class="table">
+            <tr>
+                <td>NAME</td>
+                <td>LIKE</td>
+                <td>DISLIKE</td>
+                <td>MINUS</td>
+                <td>ACTIONS</td>
+            </tr>
+            <tr ng-repeat="technology in technologies">
+                <td>{{technology.name}}</td>
+                <td>{{technology.like}}</td>
+                <td>{{technology.dislike}}</td>
+                <td>{{technology.minus}}</td>
+                <td>
+                    <button ng-click="increaseLike(technology)">like</button>
+                    <button ng-click="increaseDislike(technology)">dislike</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <br>
+    <p>++++++++++++++++++++++++++++++++</p>
+    <div ng-controller="myfilter">
+        <select name="" id="" ng-model = 'orderColums'>
+            <option value="name">name APS</option>
+            <option value="-name">name DAS</option>
+            <option value="birthDate">birth Date APS</option>
+            <option value="-birthDate">birth Date DAS</option>
+            <option value="salary">salary APS</option>
+            <option value="-salary">salary DAS</option>
+        </select>
+        <table class="table">
+            <tr>
+                <td>Name</td>
+                <td>birthDate</td>
+                <td>salary</td>
+                <td>gender</td>
+                <td>status</td>
+            </tr>
+            <tr ng-repeat="employee in employees | orderBy:orderColums">
+                <td>{{employee.name | uppercase}}</td>
+                <td>{{employee.birthDate | date: "dd/MM/yyyy"}}</td>
+                <td>{{employee.salary | currency:"":0}}</td>
+                <td>{{employee.gender}}</td>
+                <td>{{employee.status}}</td>
+            </tr>
+        </table>
+    </div>
+    <br><br><div>========================================</div>
+    <div ng-controller="myFilterClick">
+        search: <input type="text" ng-model='searchFilter'>
+        <label for="">
+            <input type="checkbox" name="" id="" ng-model = 'hideSalary'> 
+            hide Salary
+        </label>
+        <table class="table table-primary table-sm">
+            <thead>
+                <tr>
+                    <td ng-click = 'sortData("name")'>Name <div ng-class = "getSortClass('name')"></div></td>
+                    <td ng-click = 'sortData("birthDate")'>birthDate <div ng-class = "getSortClass('birthDate')"></div></td>
+                    <td ng-hide='hideSalary' ng-click = 'sortData("salary")'> salary <div ng-class = "getSortClass('salary')"></div></td>
+                    <td ng-show='hideSalary' ng-click = 'sortData("salary")'> salary</div></td>
+                    <td ng-click = 'sortData("gender")'>gender <div ng-class = "getSortClass('gender')"></div></td>
+                    <td ng-click = 'sortData("status")'>status <div ng-class = "getSortClass('status')"></div></td>
+                </tr> 
+            </thead>
+            <tbody>
+                <tr ng-repeat="employee in employees | orderBy:sortColums:reverse | filter: searchFilter">
+                    <td>{{employee.name | uppercase}}</td>
+                    <td>{{employee.birthDate | date: "dd/MM/yyyy"}}</td>
+                    <td ng-hide='hideSalary'>{{employee.salary | currency:"":0}}</td>
+                    <td ng-show='hideSalary'>xxxxxx</td>
+                    <td>{{employee.gender}}</td>
+                    <td>{{employee.status}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>
